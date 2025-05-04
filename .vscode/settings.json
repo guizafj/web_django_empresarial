@@ -1,5 +1,0 @@
-{
-    "python.pythonPath": "venv/bin/python",
-    "python.envFile": "${workspaceFolder}/.env",
-    "terminal.integrated.cwd": "${workspaceFolder}/web_empresarial"
-}
