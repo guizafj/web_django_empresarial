@@ -63,7 +63,7 @@ ROOT_URLCONF = 'web_empresarial.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/')],  # Añadido para la ruta de las plantillas
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,6 +126,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Añadido para la ruta de los archivos estáticos
+]
 
 # creacion de los ficheros media / recordar crear la carpeta media en la raiz del proyecto
 MEDIA_URL = '/media/'

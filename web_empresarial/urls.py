@@ -36,3 +36,9 @@ urlpatterns = [
 if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # aqui se accede a las imágenes por medio de las instancias creadas en settings.py
+
+
+# Personalización del admin
+admin.site.site_header = 'La Caffetiera'
+admin.site.index_title = 'Administración de La Caffetiera'
+admin.site.site_title = 'La Caffetiera' 
