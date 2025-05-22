@@ -1,25 +1,68 @@
+"""
+Configuración del panel de administración para la aplicación Blog.
+
+Este módulo registra los modelos Category y Post en el sitio de administración de Django,
+proporcionando opciones personalizadas de visualización, búsqueda y filtrado para facilitar
+la gestión de contenidos.
+
+Autor: Francisco J Diaz G
+Fecha: 2025-05-17
+"""
+
 from django.contrib import admin
 from .models import Category, Post
 
-# Register your models here.
-class CategoryAdmin(admin.ModelAdmin):  
-    readonly_fields = ('created', 'updated') # se le indica que los campos creados y actualizados no se pueden editar
-    list_display = ('name', 'created', 'updated') # se le indica que se muestren los campos nombre, fecha de creación y fecha de actualización
-    search_fields = ('name',) # se le indica que se pueda buscar por el campo nombre
-    ordering = ('-created',) # se le indica que se ordene por fecha de creación, de más reciente a más antiguo
 
-class PostAdmin(admin.ModelAdmin):  
-    readonly_fields = ('published', 'created', 'updated') # se le indica que los campos publicados, creados y actualizados no se pueden editar
-    list_display = ('title', 'published', 'autor', 'post_categories',) # se le indica que se muestren los campos título, fecha de publicación y autor
-    search_fields = ('title', 'content') # se le indica que se pueda buscar por el campo título y contenido
-    # La busqueda se puede hacer por el campo título y contenido o por lo que se especifique en la tupla
-    # para poder buscar por autor es necesario usar autor__username ya que es un dato relacional igual sucede con las categorías
-    list_filter = ('categories__name', 'autor__username',) # se le indica que se pueda filtrar por el campo categorías    
-    ordering = ('-autor', 'published') # se le indica que se ordene por fecha de creación, de más reciente a más antiguo
-    date_hierarchy = 'published' # se le indica que se muestre un calendario para seleccionar la fecha de publicación
+class CategoryAdmin(admin.ModelAdmin):
+    """
+    Configuración personalizada para el modelo Category en el admin de Django.
+
+    Atributos:
+        readonly_fields (tuple): Campos de solo lectura ('created', 'updated').
+        list_display (tuple): Campos que se muestran en la lista de categorías.
+        search_fields (tuple): Campos por los que se puede buscar.
+        ordering (tuple): Orden de las categorías en la vista de lista.
+    """
+    readonly_fields = ('created', 'updated')
+    list_display = ('name', 'created', 'updated')
+    search_fields = ('name',)
+    ordering = ('-created',)
+
+
+class PostAdmin(admin.ModelAdmin):
+    """
+    Configuración personalizada para el modelo Post en el admin de Django.
+
+    Atributos:
+        readonly_fields (tuple): Campos de solo lectura ('published', 'created', 'updated').
+        list_display (tuple): Campos que se muestran en la lista de posts.
+        search_fields (tuple): Campos por los que se puede buscar.
+        list_filter (tuple): Campos por los que se puede filtrar.
+        ordering (tuple): Orden de los posts en la vista de lista.
+        date_hierarchy (str): Campo para navegación jerárquica por fecha.
+    """
+    readonly_fields = ('published', 'created', 'updated')
+    list_display = ('title', 'published', 'autor', 'post_categories')
+    search_fields = ('title', 'content')
+    list_filter = ('categories__name', 'autor__username')
+    ordering = ('-autor', 'published')
+    date_hierarchy = 'published'
 
     def post_categories(self, obj):
-        return ", ".join([category.name for category in obj.categories.all().order_by('name')]) # se le indica que se muestre el nombre de la categoría en lugar del id de la categoría
-    post_categories.short_description = 'Categorías' # se le indica que se muestre el nombre de la categoría en lugar del id de la categoría    
-admin.site.register(Category, CategoryAdmin) # se registra el modelo de categoría con la clase de administración creada
-admin.site.register(Post, PostAdmin) # se registra el modelo de post con la clase de administración creada
+        """
+        Devuelve una cadena con los nombres de las categorías asociadas al post, separadas por coma.
+
+        Args:
+            obj (Post): Instancia del modelo Post.
+
+        Returns:
+            str: Nombres de las categorías separadas por coma.
+        """
+        return ", ".join([category.name for category in obj.categories.all().order_by('name')])
+
+    post_categories.short_description = 'Categorías'
+
+
+# Registro de los modelos en el panel de administración con sus configuraciones personalizadas
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Post, PostAdmin)

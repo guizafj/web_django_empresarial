@@ -1,3 +1,16 @@
+"""
+Configuración del panel de administración para la aplicación Core.
+
+Este módulo permite registrar los modelos de la aplicación Core en el
+panel de administración de Django para su gestión a través de la interfaz web.
+
+Autor: Francisco J Diaz G
+Fecha: 2025-05-17
+"""
+
 from django.contrib import admin
 
-# Register your models here.
+# Aquí puedes registrar tus modelos para que sean gestionables desde el admin de Django.
+# Ejemplo:
+# from .models import CoreModel
+# admin.site.register(CoreModel)

@@ -1,44 +1,52 @@
 """
-URL configuration for web_empresarial project.
+Configuración de rutas (URLs) principal para el proyecto web_empresarial.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+Este archivo define las rutas globales del proyecto, incluyendo la integración de las URLs
+de las aplicaciones internas (core, services, blog, pages, contact) y la configuración
+para servir archivos multimedia en modo desarrollo. Además, personaliza los títulos del panel de administración.
+
+Autor: Francisco J Diaz G
+Fecha: 2025-05-17
+
+Notas:
+- En producción, asegúrate de servir archivos estáticos y multimedia correctamente usando un servidor web.
+- Personaliza los títulos del admin para mejorar la experiencia de administración.
 """
+
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings # se importan las configuraciones creadas para que funcionen las modificaciones realizadas
-
-
+from django.conf import settings  # Importa la configuración global del proyecto
 
 urlpatterns = [
+    # Ruta para la página principal (core)
     path('', include('core.urls')),
-    path('services/', include('services.urls')),  # se incluye la url de los servicios
-    path('blog/', include('blog.urls')),  # se incluye la url del blog
-    path('page/', include('pages.urls')),
-     path('contact/', include('contact.urls')),
 
-    # paths del admin
+    # Ruta para la sección de servicios
+    path('services/', include('services.urls')),  # Incluye las URLs de la app Services
+
+    # Ruta para el blog
+    path('blog/', include('blog.urls')),  # Incluye las URLs de la app Blog
+
+    # Ruta para páginas estáticas
+    path('page/', include('pages.urls')),  # Incluye las URLs de la app Pages
+
+    # Ruta para el formulario de contacto
+    path('contact/', include('contact.urls')),  # Incluye las URLs de la app Contact
+
+    # Ruta para el panel de administración de Django
     path('admin/', admin.site.urls),
 ]
 
-
-# se crea la coondición para que se puedan ver las imágenes en el navegador solo en modo de desarrollo
+# Configuración para servir archivos multimedia solo en modo desarrollo
 if settings.DEBUG:
     from django.conf.urls.static import static
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # aqui se accede a las imágenes por medio de las instancias creadas en settings.py
+    # Permite acceder a archivos multimedia subidos por usuarios desde el navegador
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )
 
-
-# Personalización del admin
+# Personalización de los títulos del panel de administración de Django
 admin.site.site_header = 'La Caffetiera'
 admin.site.index_title = 'Administración de La Caffetiera'
-admin.site.site_title = 'La Caffetiera' 
+admin.site.site_title = 'La Caffetiera'
